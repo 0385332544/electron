@@ -29,7 +29,7 @@ version: 1.0.{build}
 # build_cloud: electron-16-core2
 # image: base-electron
 build_cloud: electronhq-16-core
-image: electron-104.0.5073.0
+image: e-105.0.5173.0-sync
 environment:
   GIT_CACHE_PATH: C:\Users\appveyor\libcc_cache
   ELECTRON_OUT_DIR: Default

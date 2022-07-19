@@ -24,19 +24,27 @@ const appVeyorJobs = {
   'electron-ia32': 'electron-ia32-testing'
 };
 
-async function makeRequest ({ auth, url, headers, body, method }) {
+async function makeRequest ({ auth, username, password, url, headers, body, method }) {
   const clonedHeaders = {
     ...(headers || {})
   };
-  if (auth && auth.bearer) {
+  if (auth?.bearer) {
     clonedHeaders.Authorization = `Bearer ${auth.bearer}`;
   }
-  const response = await got(url, {
+
+  const options = {
     headers: clonedHeaders,
     body,
-    method,
-    auth: auth && (auth.username || auth.password) ? `${auth.username}:${auth.password}` : undefined
-  });
+    method
+  };
+
+  if (username || password) {
+    options.username = username;
+    options.password = password;
+  }
+
+  const response = await got(url, options);
+
   if (response.statusCode < 200 || response.statusCode >= 300) {
     console.error('Error: ', `(status ${response.statusCode})`, response.body);
     throw new Error(`Unexpected status code ${response.statusCode} from ${url}`);
